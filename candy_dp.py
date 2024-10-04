@@ -35,6 +35,15 @@ def assign(st, index, value):
         st[current_node] = st[left_child(current_node)] + st[right_child(current_node)]
     return st
 
+def range_query(st, current_node, left_query, right_query, left_edge, right_edge):
+    if (left_query <= left_edge) and (right_query >= right_edge ):
+        return st[current_node]
+    else:
+        mid_point = (left_edge + right_edge) / 2
+        #exclude left
+        #exclude right
+        #include portions of both left and right
+
 if __name__ == "__main__":
     parameters = input()
     houses = input()
