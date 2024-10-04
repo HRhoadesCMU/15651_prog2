@@ -22,7 +22,7 @@ def right_child(index):
     return int(index*2 + 2)
 
 def assign(st, index, value):
-    current_node = index + int((len(st)/2) - 1)
+    current_node = index + int((len(st)-1)/2)
     st[current_node] = value
     while current_node > 0:
         current_node = parent(current_node)
@@ -30,7 +30,10 @@ def assign(st, index, value):
     return st
 
 def range_query(st, current_node, left_query, right_query, left_edge, right_edge):
+    print("CN: " + str(current_node) + " | LQ: " + str(left_query) + " | RQ: " + str(right_query))
+    print("LE: " + str(left_edge) + " | RE: " + str(right_edge))
     if ((left_query <= left_edge) and (right_query >= right_edge)):
+        print(current_node)
         return st[current_node]
     elif (left_query > right_edge) or (right_query < left_edge):
         return 0
@@ -49,7 +52,7 @@ def range_query(st, current_node, left_query, right_query, left_edge, right_edge
             return left + right
 
 def range_sum(st, i, j):
-    return range_query(st, 0, i, j, 0, int(len(st)/2))
+    return range_query(st, 0, i, j, 0, int((len(st)-1)/2))
 
 def map_values(unsorted_house_list):
     value_map = {}
@@ -94,9 +97,9 @@ def n_choose_k(n, k):
         n_fac = n_fac * counter
         counter += 1
     #print("n: " + str(n_fac) + " | k: " + str(k_fac) + " | n-k: " + str(n_minus_fac))
-    print("n: " + str(n) + " | k: " + str(k) + " | n-k: " + str(n-k))
+    #print("n: " + str(n) + " | k: " + str(k) + " | n-k: " + str(n-k))
     ret_val = int(n_fac / (k_fac * n_minus_fac))
-    print("ret val: " + str(ret_val))
+    #print("ret val: " + str(ret_val))
     return ret_val
 
 
@@ -111,11 +114,14 @@ if __name__ == "__main__":
     for keys in mapped_houses:
         mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
+            print("Ind: " + str(indices) + " | Key: " + str(keys))
             lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
             assign(segTree_houses, indices, 1)
     for items in lis_table:
         k_val = int(parameters[1])
         print(type(items))
-        if items >= k_val:
-            total += n_choose_k(items, k_val)
+        if items > k_val:
+            total += (n_choose_k(items-1, k_val) % max_val_cap)
+        elif items == k_val:
+            total += 1
     print(total)
