@@ -12,7 +12,24 @@ Choice: take house or pass
 - if equal/longer than k -> (val choose k) options, else next
 """
 
+class segTree:
+    def __init__(self, size, root):
+        self.root = None
+        self.size = size
 
+class node:
+    def __init__(self, index, value):
+        self.index = index
+        self.value = 0
+        self.left = None
+        self.right = None
+        self.parent = None
+
+
+def build_tree(size):
+    st = segTree(size)
+    for i in range (0,size):
+        
 
 
 if __name__ == "__main__":
