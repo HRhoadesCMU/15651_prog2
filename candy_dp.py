@@ -76,7 +76,7 @@ if __name__ == "__main__":
     print(mapped_houses)
     #rangeSum 0 to index
     for keys in mapped_houses:
+        mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
             lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
             assign(segTree_houses, indices, 1)
-    print(lis_table)
