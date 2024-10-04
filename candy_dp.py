@@ -67,16 +67,55 @@ def map_values(unsorted_house_list):
         value_map[sorted_list[j]] = index_list[temp_map[sorted_list[j]]]
     return value_map
 
+def n_choose_k(n, k):
+    #n! / k! (n-k)!
+    counter = 1
+    k_fac = 1
+    n_minus_fac = 1
+    if (k > n-k):
+        while counter <= n-k:
+            n_minus_fac = n_minus_fac * counter
+            counter += 1
+        k_fac = n_minus_fac
+        while counter <= k:
+            k_fac = k_fac * counter
+            counter += 1
+        n_fac = k_fac
+    else:
+        while counter <= k:
+            k_fac = k_fac * counter
+            counter += 1
+        n_minus_fac = k_fac
+        while counter <= k-n:
+            n_minus_fac = n_minus_fac * counter
+            counter += 1
+        n_fac = n_minus_fac
+    while counter <= n:
+        n_fac = n_fac * counter
+        counter += 1
+    #print("n: " + str(n_fac) + " | k: " + str(k_fac) + " | n-k: " + str(n_minus_fac))
+    print("n: " + str(n) + " | k: " + str(k) + " | n-k: " + str(n-k))
+    ret_val = int(n_fac / (k_fac * n_minus_fac))
+    print("ret val: " + str(ret_val))
+    return ret_val
+
+
 if __name__ == "__main__":
     parameters = input().split()
     houses = input().split()
     segTree_houses = build_segTree(len(houses))
     mapped_houses = map_values(houses)
     lis_table = [0 for i in range(0, len(houses))]
-    print(mapped_houses)
-    #rangeSum 0 to index
+    total = 0
+    #print(mapped_houses)
     for keys in mapped_houses:
         mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
             lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
             assign(segTree_houses, indices, 1)
+    for items in lis_table:
+        k_val = int(parameters[1])
+        print(type(items))
+        if items >= k_val:
+            total += n_choose_k(items, k_val)
+    print(total)
