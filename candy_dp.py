@@ -8,8 +8,11 @@ Choice: take house or pass
 - take house: add value to total and increase max val seen to item val, val of k decreases
 - don't take house: no change in value or max val, index increases
 
-
+- segTree with range query gives max substring to index
+- if equal/longer than k -> (val choose k) options, else next
 """
+
+
 
 
 if __name__ == "__main__":
