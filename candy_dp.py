@@ -11,25 +11,27 @@ Choice: take house or pass
 - segTree with range query gives max substring to index
 - if equal/longer than k -> (val choose k) options, else next
 """
+"""
+Implementation of segTree taken from Lecture 6 slides 15-17
+"""
+def build_segTree(size):
+    tree = [0 for items in range(2*size)]
+    return tree
 
-class segTree:
-    def __init__(self, size, root):
-        self.root = None
-        self.size = size
+def parent(index):
+    return (index-1)/2
 
-class node:
-    def __init__(self, index, value):
-        self.index = index
-        self.value = 0
-        self.left = None
-        self.right = None
-        self.parent = None
+def left_child(index):
+    return index*2 + 1
 
+def right_child(index):
+    return index*2 + 2
 
-def build_tree(size):
-    st = segTree(size)
-    for i in range (0,size):
-        
+def assign(st, index, value):
+    current_node = index + (len(st)/2) - 1
+    st[current_node] = value
+    while node > 0:
+        node = (node-1)/2 #find parent
 
 
 if __name__ == "__main__":
