@@ -52,6 +52,30 @@ def range_query(st, current_node, left_query, right_query, left_edge, right_edge
             right = range_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
             return left + right
 
+#def longest_increasing_subset(st, )
+
+def map_values(unsorted_house_list):
+    value_map = {}
+    temp_map = {}
+    index_list = [list() for items in range(0, len(unsorted_house_list))]
+    for i in range(0, len(unsorted_house_list)):
+        if unsorted_house_list[i] not in temp_map:
+            index_list[i].append(i)
+            temp_map[unsorted_house_list[i]] = i
+        else:
+            index_list[temp_map[unsorted_house_list[i]]].append(i)
+    sorted_list = unsorted_house_list
+    sorted_list.sort()
+    for j in range(0, len(sorted_list)):
+        value_map[sorted_list[j]] = index_list[temp_map[sorted_list[j]]]
+    return value_map
+
 if __name__ == "__main__":
-    parameters = input()
-    houses = input()
+    parameters = input().split()
+    houses = input().split()
+    segTree_houses = build_segTree(len(houses))
+    mapped_houses = map_values(houses)
+    print(mapped_houses)
+    #sorted_houses = houses
+    #sorted_houses.sort()
+    #mapped_houses = map_values(sorted_houses)
