@@ -41,8 +41,16 @@ def range_query(st, current_node, left_query, right_query, left_edge, right_edge
     else:
         mid_point = (left_edge + right_edge) / 2
         #exclude left
+        if (left_query >= mid_point):
+            return range_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
         #exclude right
+        elif (right_query <= mid_point):
+            return range_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
         #include portions of both left and right
+        else:
+            left = range_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
+            right = range_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
+            return left + right
 
 if __name__ == "__main__":
     parameters = input()
