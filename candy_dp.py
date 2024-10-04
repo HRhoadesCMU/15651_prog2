@@ -30,9 +30,10 @@ def right_child(index):
 def assign(st, index, value):
     current_node = index + (len(st)/2) - 1
     st[current_node] = value
-    while node > 0:
-        node = (node-1)/2 #find parent
-
+    while current_node > 0:
+        current_node = parent(current_node)
+        st[current_node] = st[left_child(current_node)] + st[right_child(current_node)]
+    return st
 
 if __name__ == "__main__":
     parameters = input()
