@@ -56,6 +56,33 @@ def range_query(st, current_node, left_query, right_query, left_edge, right_edge
 def range_sum(st, i, j):
     return range_query(st, 0, i, j, 0, int((len(st)-1)/2))
 
+def range_max(st, i, j):
+    return range_max_query(st, 0, i, j, 0, int((len(st)-1)/2))
+
+def range_max_query(st, current_node, left_query, right_query, left_edge, right_edge):
+    #print("CN: " + str(current_node) + " | LQ: " + str(left_query) + " | RQ: " + str(right_query))
+    #print("LE: " + str(left_edge) + " | RE: " + str(right_edge))
+    if ((left_query <= left_edge) and (right_query >= right_edge)):
+        #print(current_node)
+        return st[current_node]
+    elif (left_query > right_edge) or (right_query < left_edge):
+        return 0
+    else:
+        mid_point = int((left_edge + right_edge) / 2)
+        #exclude left
+        if (left_query >= mid_point):
+            #print("Call right")
+            return range_max_query(st, right_child(current_node), left_query, right_query, mid_point + 1, right_edge)
+        #exclude right
+        elif (right_query <= mid_point):
+            #print("Call left")
+            return range_max_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
+        #include portions of both left and right
+        else:
+            left = range_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
+            right = range_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
+            return max(left, right)
+
 def map_values(unsorted_house_list):
     value_map = {}
     temp_map = {}
@@ -134,22 +161,27 @@ if __name__ == "__main__":
             assign(segTree_houses, indices, 1)
 
     while counter < k_val:
+        print(mapped_houses)
         reset_tree(segTree_houses)
         for keys in mapped_houses:
             for indices in mapped_houses[keys]:
                 #print("Ind: " + str(indices) + " | Key: " + str(keys))
                 if lis_table[indices] > 1:
-                    assign(segTree_houses, indices, lis_table[indices] - 1)
+                    assign(segTree_houses, indices, lis_table[indices])
+                    lis_table[indices] = range_sum(segTree_houses, 0, indices)
                 else:
                     assign(segTree_houses, indices, 0)
-                lis_table[indices] = range_sum(segTree_houses, 0, indices)
+                    lis_table[indices] = 0
+                #lis_table[indices] = range_sum(segTree_houses, 0, indices)
                 
         counter += 1
-        #print(lis_table)
+        print(lis_table)
     
     for items in lis_table:
         total = (total + items) % max_val_cap
     if k_val == 1:
         print(n_val)
+    elif k_val > n_val:
+        print(0)
     else:
         print(total)
