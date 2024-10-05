@@ -30,10 +30,10 @@ def assign(st, index, value):
     return st
 
 def range_query(st, current_node, left_query, right_query, left_edge, right_edge):
-    print("CN: " + str(current_node) + " | LQ: " + str(left_query) + " | RQ: " + str(right_query))
-    print("LE: " + str(left_edge) + " | RE: " + str(right_edge))
+    #print("CN: " + str(current_node) + " | LQ: " + str(left_query) + " | RQ: " + str(right_query))
+    #print("LE: " + str(left_edge) + " | RE: " + str(right_edge))
     if ((left_query <= left_edge) and (right_query >= right_edge)):
-        print(current_node)
+        #print(current_node)
         return st[current_node]
     elif (left_query > right_edge) or (right_query < left_edge):
         return 0
@@ -41,9 +41,11 @@ def range_query(st, current_node, left_query, right_query, left_edge, right_edge
         mid_point = int((left_edge + right_edge) / 2)
         #exclude left
         if (left_query >= mid_point):
+            #print("Call right")
             return range_query(st, right_child(current_node), left_query, right_query, mid_point + 1, right_edge)
         #exclude right
         elif (right_query <= mid_point):
+            #print("Call left")
             return range_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
         #include portions of both left and right
         else:
@@ -102,11 +104,17 @@ def n_choose_k(n, k):
     #print("ret val: " + str(ret_val))
     return ret_val
 
+def fit_tree(input_length):
+    counter = 0
+    while (input_length/2 != 0) or (input_length%2 != 0):
+        counter += 1
+        input_length = int(input_length / 2)
+    return 2**counter
 
 if __name__ == "__main__":
     parameters = input().split()
     houses = input().split()
-    segTree_houses = build_segTree(len(houses))
+    segTree_houses = build_segTree(fit_tree(int(parameters[0])))
     mapped_houses = map_values(houses)
     lis_table = [0 for i in range(0, len(houses))]
     total = 0
@@ -114,12 +122,11 @@ if __name__ == "__main__":
     for keys in mapped_houses:
         mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
-            print("Ind: " + str(indices) + " | Key: " + str(keys))
+            #print("Ind: " + str(indices) + " | Key: " + str(keys))
             lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
             assign(segTree_houses, indices, 1)
     for items in lis_table:
         k_val = int(parameters[1])
-        print(type(items))
         if items > k_val:
             total += (n_choose_k(items-1, k_val) % max_val_cap)
         elif items == k_val:
