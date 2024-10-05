@@ -59,6 +59,14 @@ def range_sum(st, i, j):
 def range_max(st, i, j):
     return range_max_query(st, 0, i, j, 0, int((len(st)-1)/2))
 
+def assign_max(st, index, value):
+    current_node = index + int((len(st)-1)/2)
+    st[current_node] = value
+    while current_node > 0:
+        current_node = parent(current_node)
+        st[current_node] = max(st[left_child(current_node)], st[right_child(current_node)])
+    return st
+
 def range_max_query(st, current_node, left_query, right_query, left_edge, right_edge):
     #print("CN: " + str(current_node) + " | LQ: " + str(left_query) + " | RQ: " + str(right_query))
     #print("LE: " + str(left_edge) + " | RE: " + str(right_edge))
@@ -79,8 +87,8 @@ def range_max_query(st, current_node, left_query, right_query, left_edge, right_
             return range_max_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
         #include portions of both left and right
         else:
-            left = range_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
-            right = range_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
+            left = range_max_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
+            right = range_max_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
             return max(left, right)
 
 def map_values(unsorted_house_list):
@@ -153,6 +161,7 @@ if __name__ == "__main__":
     n_val = int(parameters[0])
     k_val = int(parameters[1])
     #print(mapped_houses)
+    """ Initial Range Query Implementation
     for keys in mapped_houses:
         mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
@@ -176,12 +185,23 @@ if __name__ == "__main__":
                 
         counter += 1
         print(lis_table)
-    
-    for items in lis_table:
-        total = (total + items) % max_val_cap
+    """
+    for keys in mapped_houses:
+        mapped_houses[keys].reverse()
+        for indices in mapped_houses[keys]:
+            #print("Ind: " + str(indices) + " | Key: " + str(keys))
+            lis_table[indices] = range_max(segTree_houses, 0, indices) + 1
+            assign_max(segTree_houses, indices, lis_table[indices])
+    print(lis_table)
+
     if k_val == 1:
         print(n_val)
     elif k_val > n_val:
         print(0)
     else:
+        for items in lis_table:      
+            if items == k_val:
+                total += 1
+            elif items > k_val:
+                total = (total + (n_choose_k(items, k_val) - n_choose_k(items-1, k_val))) % max_val_cap
         print(total)
