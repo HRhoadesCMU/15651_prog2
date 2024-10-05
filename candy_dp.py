@@ -125,10 +125,13 @@ if __name__ == "__main__":
             #print("Ind: " + str(indices) + " | Key: " + str(keys))
             lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
             assign(segTree_houses, indices, 1)
+    print(lis_table)
     for items in lis_table:
         k_val = int(parameters[1])
-        if items > k_val:
-            total += (n_choose_k(items-1, k_val) % max_val_cap)
-        elif items == k_val:
+        if items == k_val:
             total += 1
+        elif items-1 == k_val:
+            total += (n_choose_k(items, k_val) % max_val_cap)
+        elif items > k_val:
+            total += (n_choose_k(items - 1, k_val) % max_val_cap)
     print(total)
