@@ -111,6 +111,10 @@ def fit_tree(input_length):
         input_length = int(input_length / 2)
     return 2**counter
 
+def reset_tree(st):
+    for i in range(0, int((len(st)/2)-1)):
+        assign(st, i, 0)
+
 if __name__ == "__main__":
     parameters = input().split()
     houses = input().split()
@@ -118,20 +122,30 @@ if __name__ == "__main__":
     mapped_houses = map_values(houses)
     lis_table = [0 for i in range(0, len(houses))]
     total = 0
+    counter = 2
+    k_val = int(parameters[1])
     #print(mapped_houses)
     for keys in mapped_houses:
         mapped_houses[keys].reverse()
         for indices in mapped_houses[keys]:
             #print("Ind: " + str(indices) + " | Key: " + str(keys))
-            lis_table[indices] = range_sum(segTree_houses, 0, indices) + 1
+            lis_table[indices] = range_sum(segTree_houses, 0, indices)
             assign(segTree_houses, indices, 1)
-    print(lis_table)
+
+    while counter < k_val:
+        reset_tree(segTree_houses)
+        for keys in mapped_houses:
+            for indices in mapped_houses[keys]:
+                #print("Ind: " + str(indices) + " | Key: " + str(keys))
+                if lis_table[indices] > 1:
+                    assign(segTree_houses, indices, lis_table[indices] - 1)
+                else:
+                    assign(segTree_houses, indices, 0)
+                lis_table[indices] = range_sum(segTree_houses, 0, indices)
+                
+        counter += 1
+        #print(lis_table)
+    
     for items in lis_table:
-        k_val = int(parameters[1])
-        if items == k_val:
-            total += 1
-        elif items-1 == k_val:
-            total += (n_choose_k(items, k_val) % max_val_cap)
-        elif items > k_val:
-            total += (n_choose_k(items - 1, k_val) % max_val_cap)
+        total = (total + items) % max_val_cap
     print(total)
