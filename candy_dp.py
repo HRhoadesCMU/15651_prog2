@@ -123,6 +123,7 @@ if __name__ == "__main__":
     lis_table = [0 for i in range(0, len(houses))]
     total = 0
     counter = 2
+    n_val = int(parameters[0])
     k_val = int(parameters[1])
     #print(mapped_houses)
     for keys in mapped_houses:
@@ -148,4 +149,7 @@ if __name__ == "__main__":
     
     for items in lis_table:
         total = (total + items) % max_val_cap
-    print(total)
+    if k_val == 1:
+        print(n_val)
+    else:
+        print(total)
