@@ -5,7 +5,7 @@ max_val_cap = 1000000007 # final result is total value % max_val_cap
 Implementation of segTree taken from Lecture 6 slides 15-17
 """
 def build_segTree(size):
-    tree = [(0,0) for items in range(2*size)]
+    tree = [(0,1) for items in range(2*size)]
     return tree
 
 def parent(index):
@@ -41,7 +41,7 @@ def range_max_query(st, current_node, left_query, right_query, left_edge, right_
     if ((left_query <= left_edge) and (right_query >= right_edge)):
         return st[current_node]
     elif (left_query > right_edge) or (right_query < left_edge):
-        return (0,0)
+        return (0,1)
     else:
         mid_point = int((left_edge + right_edge) / 2)
         #exclude left
@@ -55,6 +55,7 @@ def range_max_query(st, current_node, left_query, right_query, left_edge, right_
             left = range_max_query(st, left_child(current_node), left_query, right_query, left_edge, mid_point)
             right = range_max_query(st, right_child(current_node), left_query, right_query, mid_point, right_edge)
             if left[0] == right[0]:
+                print(left[1] + right[1])
                 return (left[0], left[1] + right[1])
             elif left[0] > right[0]:
                 return left
@@ -141,7 +142,7 @@ if __name__ == "__main__":
     else:
         for items in lis_table:      
             if items[0] == k_val:
-                total += 1
+                total += items[1]
             elif items[0] > k_val:
-                total = (total + (n_choose_k(items[0] + (items[1]-1), k_val) - n_choose_k(items[0] + (items[1]-1) - 1, k_val))) % max_val_cap
+                total = (total + (n_choose_k(items[0] + (items[1]-1), k_val) - n_choose_k(items[0] - 1, k_val))) % max_val_cap
         print(total)
